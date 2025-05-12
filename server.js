@@ -1,4 +1,6 @@
-const http = require('http');
+import express from 'express'
+
+const app = express()
 
 const PORT = 3000;
 const TEMPLATE = `<!DOCTYPE html>
@@ -14,12 +16,10 @@ const TEMPLATE = `<!DOCTYPE html>
 </html>`;
 
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(TEMPLATE);
-    res.end();
+app.use('*all', async (req, res) => {
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(TEMPLATE)
 });
 
-server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
-});
+app.listen(PORT, () => {
+    console.log(`Server started at http://localhost:${PORT}`);
+})
