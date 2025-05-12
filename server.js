@@ -1,6 +1,5 @@
 import express from 'express'
 import fs from "node:fs/promises";
-import sirv from 'sirv'
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -23,7 +22,10 @@ if (isDevelopment) {
 }
 
 if (isProduction) {
-    app.use(BASE, sirv('./dist/client', {extensions: []}))
+    const compression = (await import('compression')).default;
+    const sirv = (await import('sirv')).default;
+    app.use(compression());
+    app.use(BASE, sirv('./dist/client', {extensions: []}));
 }
 
 app.use('*all', async (req, res) => {
