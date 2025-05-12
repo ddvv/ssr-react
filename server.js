@@ -1,23 +1,24 @@
 import express from 'express'
+import fs from "node:fs/promises";
+import sirv from 'sirv'
 
 const app = express()
 
 const PORT = 3000;
-const TEMPLATE = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>SSR</h1>
-</body>
-</html>`;
+const BASE = '/'
+const TEMPLATE =  await fs.readFile('./dist/client/index.html', 'utf-8');
 
+app.use(BASE, sirv('./dist/client', { extensions: [] }))
 
 app.use('*all', async (req, res) => {
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(TEMPLATE)
+    const url = req.originalUrl;
+    let render;
+    render = (await import('./dist/server/entry-server.js')).render;
+    const rendered = await render(url);
+    const html = TEMPLATE
+        .replace(`<!--app-head-->`, rendered.head ?? '')
+        .replace(`<!--app-html-->`, rendered.html ?? '')
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
 });
 
 app.listen(PORT, () => {
