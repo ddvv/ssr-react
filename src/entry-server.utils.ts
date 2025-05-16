@@ -1,4 +1,5 @@
 //@ts-nocheck
+// Код взят из [документации](https://reactrouter.com/6.30.0/guides/ssr#with-a-data-router)
 export function createFetchRequest(req, res) {
     let origin = `${req.protocol}://${req.get("host")}`;
     // Note: This had to take originalUrl into account for presumably vite's proxying
