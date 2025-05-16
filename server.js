@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevelopment = process.env.NODE_ENV === 'development';
-const PORT = 3000;
+const PORT = 5173;
 const BASE = '/'
 
 const app = express()
@@ -39,7 +39,7 @@ app.use('*all', async (req, res) => {
         if (isDevelopment) {
             template = await fs.readFile('./index.html', 'utf-8');
             template = await vite.transformIndexHtml(url, template);
-            render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render;
+            render = (await vite.ssrLoadModule('./src/entry-server.tsx')).render;
         }
 
         if (isProduction) {
@@ -47,7 +47,7 @@ app.use('*all', async (req, res) => {
             render = (await import('./dist/server/entry-server.js')).render;
         }
 
-        const rendered = await render(url);
+        const rendered = await render(req, res);
         const html = template
             .replace(`<!--app-head-->`, rendered.head ?? '')
             .replace(`<!--app-html-->`, rendered.html ?? '');
