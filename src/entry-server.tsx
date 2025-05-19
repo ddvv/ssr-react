@@ -3,10 +3,13 @@ import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "rea
 import {routes} from "./router/routes"
 
 import {type Request as ExpressRequest, type Response as ExpressResponse} from "express"
-import {createFetchRequest} from "./entry-server.utils.js";
+import {createFetchRequest, createPreloadedStateTemplate} from "./entry-server.utils.js";
+import {reducer} from "./redux/reducer.ts";
+import {Provider} from "react-redux";
+import {configureStore} from "@reduxjs/toolkit";
 
 export async function render(req: ExpressRequest, res: ExpressResponse) {
-
+    const store = configureStore({reducer})
     let handler = createStaticHandler(routes);
     let fetchRequest = createFetchRequest(req, res);
     let context = await handler.query(fetchRequest);
@@ -16,11 +19,15 @@ export async function render(req: ExpressRequest, res: ExpressResponse) {
     );
 
     let html = renderToString(
-        <StaticRouterProvider
-            router={router}
-            context={context}
-        />
+        <Provider store={store}>
+            <StaticRouterProvider
+                router={router}
+                context={context}
+            />
+        </Provider>
     );
 
-    return {html}
+    const preloadedState = createPreloadedStateTemplate(store.getState());
+
+    return {html, preloadedState}
 }
