@@ -4,12 +4,11 @@ import {routes} from "./router/routes"
 
 import {type Request as ExpressRequest, type Response as ExpressResponse} from "express"
 import {createFetchRequest, createPreloadedStateTemplate} from "./entry-server.utils.js";
-import {reducer} from "./redux/reducer.ts";
 import {Provider} from "react-redux";
-import {configureStore} from "@reduxjs/toolkit";
+import {store} from "./redux/store.ts";
+import {jsonplaceholderApi} from "./redux/services/jsonplaceholder";
 
 export async function render(req: ExpressRequest, res: ExpressResponse) {
-    const store = configureStore({reducer})
     let handler = createStaticHandler(routes);
     let fetchRequest = createFetchRequest(req, res);
     let context = await handler.query(fetchRequest);
@@ -17,6 +16,9 @@ export async function render(req: ExpressRequest, res: ExpressResponse) {
         handler.dataRoutes,
         context
     );
+
+    // https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering#server-side-rendering-elsewhere
+    await Promise.all(store.dispatch(jsonplaceholderApi.util.getRunningQueriesThunk()))
 
     let html = renderToString(
         <Provider store={store}>
