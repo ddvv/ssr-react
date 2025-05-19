@@ -11,6 +11,9 @@ export const Root = () => {
                     <li>
                         <Link to="/about">About</Link>
                     </li>
+                    <li>
+                        <Link to="/counter">Counter</Link>
+                    </li>
                 </ul>
             </nav>
         </header>

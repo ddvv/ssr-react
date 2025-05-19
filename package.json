@@ -12,10 +12,12 @@
     "preview": "NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "2.8.2",
     "compression": "1.8.0",
     "express": "5.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-redux": "9.2.0",
     "react-router": "6.30.0",
     "react-router-dom": "6.30.0",
     "sirv": "3.0.1"

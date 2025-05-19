@@ -34,3 +34,10 @@ export function createFetchRequest(req, res) {
 
     return new Request(url.href, init);
 };
+
+export function createPreloadedStateTemplate(preloadedState) {
+    return `<script>window.__PRELOADED_STATE__ =${JSON.stringify(preloadedState).replace(
+        /</g,
+        '\\u003c'
+    )}</script>`;
+}
