@@ -3,6 +3,7 @@ import {Error} from "./pages/error";
 import {Root} from "./pages/root";
 import {About} from "./pages/about";
 import {Counter} from "./pages/counter";
+import {Users} from "./pages/users";
 
 type Routes = RouteObject[];
 
@@ -19,6 +20,10 @@ export const routes: Routes = [
             {
                 path: "counter/",
                 element: <Counter/>,
+            },
+            {
+                path: "users/",
+                element: <Users/>,
             },
         ],
     },

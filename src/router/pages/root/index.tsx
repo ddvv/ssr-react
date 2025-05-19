@@ -14,6 +14,9 @@ export const Root = () => {
                     <li>
                         <Link to="/counter">Counter</Link>
                     </li>
+                    <li>
+                        <Link to="/users">Users</Link>
+                    </li>
                 </ul>
             </nav>
         </header>
