@@ -7,6 +7,6 @@ export const Users = () => {
         <h1>Users Page</h1>
         {isLoading && <p>Пользователи загружаются</p>}
         {error && <p>Не удалось загрузить</p>}
-        {data && <ul>{data.map(user => <li>{user.name}</li>)}</ul>}
+        {data && <ul>{data.map(user => <li key={user.id}>{user.name}</li>)}</ul>}
     </div>;
 }
