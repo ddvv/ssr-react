@@ -1,5 +1,7 @@
 //@ts-nocheck
 // Код взят из [документации](https://reactrouter.com/6.30.0/guides/ssr#with-a-data-router)
+import type {HelmetData} from "react-helmet";
+
 export function createFetchRequest(req, res) {
     let origin = `${req.protocol}://${req.get("host")}`;
     // Note: This had to take originalUrl into account for presumably vite's proxying
@@ -40,4 +42,12 @@ export function createPreloadedStateTemplate(preloadedState) {
         /</g,
         '\\u003c'
     )}</script>`;
+}
+
+export function createHeadTags(helmet: HelmetData) {
+    return `
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}
+    `;
 }

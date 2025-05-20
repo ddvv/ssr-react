@@ -3,10 +3,11 @@ import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "rea
 import {routes} from "./router/routes"
 
 import {type Request as ExpressRequest, type Response as ExpressResponse} from "express"
-import {createFetchRequest, createPreloadedStateTemplate} from "./entry-server.utils.js";
+import {createFetchRequest, createHeadTags, createPreloadedStateTemplate} from "./entry-server.utils.js";
 import {Provider} from "react-redux";
 import {store} from "./redux/store.ts";
 import {jsonplaceholderApi} from "./redux/services/jsonplaceholder";
+import {Helmet} from "react-helmet";
 
 export async function render(req: ExpressRequest, res: ExpressResponse) {
     let handler = createStaticHandler(routes);
@@ -28,8 +29,12 @@ export async function render(req: ExpressRequest, res: ExpressResponse) {
             />
         </Provider>
     );
+    // Вызвать обязательно после renderToString
+    // https://www.npmjs.com/package/react-helmet#server-usage
+    const helmet = Helmet.renderStatic();
 
     const preloadedState = createPreloadedStateTemplate(store.getState());
+    const head = createHeadTags(helmet);
 
-    return {html, preloadedState}
+    return {html, preloadedState, head};
 }
