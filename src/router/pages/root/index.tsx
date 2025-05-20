@@ -1,7 +1,13 @@
 import {Link, Outlet} from "react-router-dom";
+import {MetaTags, type MetaTagsProps} from "../../components/meta-tags";
+
+const metaTags: MetaTagsProps = {
+    title: "Страница Main",
+    description: "Описание страницы Main",
+}
 
 export const Root = () => {
-    return <>
+    return <MetaTags {...metaTags}>
         <header>
             <nav>
                 <ul>
@@ -21,5 +27,5 @@ export const Root = () => {
             </nav>
         </header>
         <main><Outlet/></main>
-    </>
+    </MetaTags>
 }
